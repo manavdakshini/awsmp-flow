@@ -1,0 +1,53 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "triggers": {
+            "When_a_HTTP_request_is_received": {
+                "type": "Request",
+                "kind": "Http",
+                "inputs": {
+                    "schema": {}
+                }
+            }
+        },
+        "actions": {
+            "Forward_to_Azure_Function": {
+                "type": "Http",
+                "inputs": {
+                    "uri": "https://manavfun.azurewebsites.net/api/manav",
+                    "method": "POST",
+                    "headers": "@triggerOutputs().headers",
+                    "body": "@triggerBody()"
+                },
+                "runAfter": {}
+            },
+            "Return_Response": {
+                "type": "Response",
+                "kind": "Http",
+                "inputs": {
+                    "statusCode": "@outputs('Forward_to_Azure_Function')?['statusCode']",
+                    "headers": "@outputs('Forward_to_Azure_Function')?['headers']",
+                    "body": "@outputs('Forward_to_Azure_Function')?['body']"
+                },
+                "runAfter": {
+                    "Forward_to_Azure_Function": [
+                        "Succeeded"
+                    ]
+                }
+            }
+        },
+        "outputs": {},
+        "parameters": {
+            "$connections": {
+                "type": "Object",
+                "defaultValue": {}
+            }
+        }
+    },
+    "parameters": {
+        "$connections": {
+            "type": "Object",
+            "value": {}
+        }
+    }
+}
