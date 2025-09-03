@@ -14,7 +14,7 @@
             "Forward_to_Azure_Function": {
                 "type": "Http",
                 "inputs": {
-                    "uri": "https://manavfun.azurewebsites.net/api/manav",
+                    "uri": "<func URL>",
                     "method": "POST",
                     "headers": "@triggerOutputs().headers",
                     "body": "@triggerBody()"
